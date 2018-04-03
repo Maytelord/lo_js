@@ -51,13 +51,23 @@ router.get('/:id/:nombre', (req, res, next) => {
 
 
 //GET API
-router.get("/prueba", function(req , res){
+router.get("/get", function(req , res){
     var result = marcaModel.getMarcas(res);
     result.then(function(result) {
 		// you can access the result from the promise here
 		res.send(result);
 	});
 
+});
+
+router.post("/baja", function (req, res) {
+	console.log(req.body);
+	var result = marcaModel.bajaMarca(req, res);
+	result.then(function (result) {
+		// you can access the result from the promise here
+		res.send(result);
+
+	});
 });
 
 router.post("/alta", function(req , res){
@@ -83,7 +93,7 @@ router.post("/alta", function(req , res){
 });
 
 
-router.post("/cambio", function(req , res){
+router.post("/mod", function(req , res){
 
   upload(req, res, function (err) {
     if (err) {
@@ -104,16 +114,6 @@ router.post("/cambio", function(req , res){
 
 
 });
-
-router.post("/baja", function (req, res) {
-	var result = marcaModel.bajaMarca(req, res);
-	result.then(function (result) {
-		// you can access the result from the promise here
-		res.send(result);
-});
-
-
-
 
 
 

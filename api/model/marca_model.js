@@ -29,16 +29,18 @@ module.exports = {
 	},
 
     cambiarMarca : async function(req, res){
+          
                 var now = new Date();
 
                 var formatDate = dateformat.dateFormat(now, "isoDateTime");
                 if(!req.file){
-                    var query = "UPDATE marcas SET nombre='"+req.body.nombre+"',color='"+req.body.color+"',fecha_editado='"+formatDate+"' WHERE id="+req.body.idMarca;
+                    var query = "UPDATE marcas SET nombre='"+req.body.nombre+"',color='"+req.body.color+"',fecha_editado='"+formatDate+"' WHERE id="+req.body.id;
 
                 }else{
-                    var query = "UPDATE marcas SET nombre='"+req.body.nombre+"',color='"+req.body.color+"',logo_principal='"+req.file.filename+"',fecha_editado='"+formatDate+"' WHERE id="+req.body.idMarca;
+                    var query = "UPDATE marcas SET nombre='"+req.body.nombre+"',color='"+req.body.color+"',logo_principal='"+req.file.filename+"',fecha_editado='"+formatDate+"' WHERE id="+req.body.id;
 
                 }
+                console.log(query);
                 var result = await database.executeQuery (res,query);
                 
                 return result ;
@@ -49,9 +51,8 @@ module.exports = {
     },
 
     bajaMarca: async function (req, res) {
-        var query = "UPDATE Marca" +
-            " SET estatus = '-1'"  +
-            " WHERE id  = " + req.body.id;
+        
+        var query = "UPDATE marcas SET estatus = '-1' WHERE id  = " + req.body.id;
         console.log(query);
 
         var result = await database.executeQuery(res, query);
