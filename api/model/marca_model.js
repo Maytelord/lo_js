@@ -46,6 +46,16 @@ module.exports = {
                     // you can access the result from the promise here
                     res.send(result);
                 });*/
+    },
+
+    bajaMarca: async function (req, res) {
+        var query = "UPDATE Marca" +
+            " SET estatus = '-1'"  +
+            " WHERE id  = " + req.body.id;
+        console.log(query);
+
+        var result = await database.executeQuery(res, query);
+        return result;
     }
 
 }

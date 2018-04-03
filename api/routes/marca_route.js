@@ -105,6 +105,13 @@ router.post("/cambio", function(req , res){
 
 });
 
+router.post("/baja", function (req, res) {
+	var result = marcaModel.bajaMarca(req, res);
+	result.then(function (result) {
+		// you can access the result from the promise here
+		res.send(result);
+});
+
 
 
 
