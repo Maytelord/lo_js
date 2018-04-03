@@ -4,7 +4,7 @@ const dateformat = require('../lib/dateFormat');
 
 module.exports = {
 	getMarcas : async function(res){
-              	var query = "select * from [marcas]";
+				var query = "select * from [marca] where estatus != '-1'";
                 var result = await database.executeQuery (res,query);
 
                 return result ;
@@ -18,7 +18,7 @@ module.exports = {
 				var now = new Date();
 
 				var formatDate = dateformat.dateFormat(now, "isoDateTime");
-              	var query = "INSERT INTO [marcas] (nombre,color,logo_principal,fecha_creado,estatus) VALUES ('"+req.body.nombre+"','"+req.body.color+"','"+req.file.filename+"','"+formatDate+"','1')";
+              	var query = "INSERT INTO [marca] (nombre,color,logo_principal,fecha_creado,estatus) VALUES ('"+req.body.nombre+"','"+req.body.color+"','"+req.file.filename+"','"+formatDate+"','1')";
                 var result = await database.executeQuery (res,query);
                 
                 return result ;
@@ -33,12 +33,13 @@ module.exports = {
 
                 var formatDate = dateformat.dateFormat(now, "isoDateTime");
                 if(!req.file){
-                    var query = "UPDATE marcas SET nombre='"+req.body.nombre+"',color='"+req.body.color+"',fecha_editado='"+formatDate+"' WHERE id="+req.body.idMarca;
+                    var query = "UPDATE marca SET nombre='"+req.body.nombre+"',color='"+req.body.color+"',fecha_editado='"+formatDate+"' WHERE id="+req.body.id;
 
                 }else{
-                    var query = "UPDATE marcas SET nombre='"+req.body.nombre+"',color='"+req.body.color+"',logo_principal='"+req.file.filename+"',fecha_editado='"+formatDate+"' WHERE id="+req.body.idMarca;
+                    var query = "UPDATE marca SET nombre='"+req.body.nombre+"',color='"+req.body.color+"',logo_principal='"+req.file.filename+"',fecha_editado='"+formatDate+"' WHERE id="+req.body.id;
+				}
+				console.log(query);
 
-                }
                 var result = await database.executeQuery (res,query);
                 
                 return result ;

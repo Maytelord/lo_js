@@ -47,11 +47,8 @@ router.get('/:id/:nombre', (req, res, next) => {
 	});
 });
 
-
-
-
 //GET API
-router.get("/prueba", function(req , res){
+router.get("/get", function(req , res){
     var result = marcaModel.getMarcas(res);
     result.then(function(result) {
 		// you can access the result from the promise here
@@ -60,9 +57,12 @@ router.get("/prueba", function(req , res){
 
 });
 
-router.post("/alta", function(req , res){
+router.post("/alta", function (req, res) {
+	console.log("body:"+req.body);
+	console.log("file:" +req.file);
 
-  upload(req, res, function (err) {
+	upload(req, res, function (err) {
+
     if (err) {
       // An error occurred when uploading
       console.log(err);
@@ -106,10 +106,13 @@ router.post("/cambio", function(req , res){
 });
 
 router.post("/baja", function (req, res) {
-	var result = marcaModel.bajaMarca(req, res);
-	result.then(function (result) {
-		// you can access the result from the promise here
-		res.send(result);
+		upload(req, res, function (err) {
+			var result = marcaModel.bajaMarca(req, res);
+			result.then(function (result) {
+				// you can access the result from the promise here
+				res.send(result);
+		})	
+	});
 });
 
 

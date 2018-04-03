@@ -4,8 +4,13 @@ var sql = require("mssql");
 var dbConfig = {
     user: 'sa',
     password: 'may',
-    server: '192.168.10.98', 
-    database: 'prueba' 
+	server: 'localhost', 
+	database: 'Logrand',
+	port: '51916',
+	dialect: "mssql",
+	dialectOptions: {
+		"instanceName": "SQLEXPRESS"
+	}
 };
 
 
