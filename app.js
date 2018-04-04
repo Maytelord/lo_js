@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const usuariosRoutes = require('./api/routes/usuario_route');
 const marcasRoutes = require('./api/routes/marca_route');
 const seccionRoutes = require('./api/routes/seccion_route');
+const subseccionRoutes = require('./api/routes/subseccion_route');
+
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,6 +29,7 @@ app.use((req, res, next) => {
 app.use('/usuarios', usuariosRoutes);
 app.use('/marcas', marcasRoutes);
 app.use('/seccion', seccionRoutes);
+app.use('/subseccion', subseccionRoutes);
 
 app.use((req, res, next) => {
 	const error = new Error('Not Found');
