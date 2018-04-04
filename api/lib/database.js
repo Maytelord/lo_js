@@ -1,12 +1,29 @@
 const express = require('express');
 var sql = require("mssql");
 
-var dbConfig = {
-    user: 'sa',
-    password: 'may',
-    server: '192.168.10.98', 
-    database: 'prueba' 
+////may
+//var dbConfig = {
+//    user: 'sa',
+//    password: 'may',
+//    server: '192.168.10.98', 
+//    database: 'prueba' 
+//};
+
+
+var dbConfig ={
+	user: 'sa',
+		password: 'may',
+			server: 'localhost',
+				database: 'Logrand',
+					port: '51916',
+						dialect: "mssql",
+							dialectOptions: {
+		"instanceName": "SQLEXPRESS"
+	}
 };
+
+
+
 
 
 
