@@ -7,6 +7,9 @@ const usuariosRoutes = require('./api/routes/usuario_route');
 const marcasRoutes = require('./api/routes/marca_route');
 const seccionRoutes = require('./api/routes/seccion_route');
 const subseccionRoutes = require('./api/routes/subseccion_route');
+const temaRoutes = require('./api/routes/tema_route');
+const celdaRoutes = require('./api/routes/celda_route');
+const wireframeRoutes = require('./api/routes/wireframe_route');
 
 
 app.use(morgan('dev'));
@@ -30,6 +33,10 @@ app.use('/usuarios', usuariosRoutes);
 app.use('/marcas', marcasRoutes);
 app.use('/seccion', seccionRoutes);
 app.use('/subseccion', subseccionRoutes);
+app.use('/tema', temaRoutes);
+app.use('/celda', celdaRoutes);
+app.use('/wireframe', wireframeRoutes);
+
 
 app.use((req, res, next) => {
 	const error = new Error('Not Found');
