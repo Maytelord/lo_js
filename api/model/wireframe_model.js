@@ -3,9 +3,58 @@ const database = require('../lib/database');
 const dateformat = require('../lib/dateFormat');
 
 module.exports = {
-	getMenu: async function (res) {
 
-		var result = this.getSubseccion(res);
+	gettema: async function (req, res) {
+		var id = req.body.id; 
+		id = 2;
+		var idc = req.body.idc;
+		idc = 1;
+		var query = "select * from Tema where id_marca_subseccion = " + id +
+			" AND estatus = '1' AND categoria = " + idc;
+
+		var tema = await database.executeQuery(res, query);
+		console.log("T id: " + tema[0].id);
+
+		var i;
+		var arreglotemas = [];
+
+		var arregloceldas = [];
+
+
+
+
+		
+		arregloceldas = await this.getCelda(res, tema[0].id);
+		console.log("L: " + arregloceldas.length);
+
+		
+
+
+		
+
+		var temafinal = {
+			id: tema[0].id,
+			nombre: tema[0].nombre,
+			celdas: arregloceldas
+		};
+		arreglotemas.push(temafinal);
+		var mymenu = {
+			temas: arreglotemas
+		};
+
+		return mymenu;
+	},
+	getCelda: async function (res, id) {
+		var query = "select * from Celda where id_tema = " + id + " AND estatus = '1'";
+		console.log(query);
+		var result = await database.executeQuery(res, query);
+
+		return result;
+	},
+
+	getMenu: async function (req, res) {
+
+		var result = this.getSubseccion(req, res);
 		//var result2 = result.substr(1, result.length - 1);
 
 		return result;

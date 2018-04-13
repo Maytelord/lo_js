@@ -55,8 +55,15 @@ router.get("/get", function (req, res) {
 	});
 
 });
+//GET API
+router.post("/gettema", function (req, res) {
+	var result = wireframeModel.gettema(req, res);
+	result.then(function (result) {
+		// you can access the result from the promise here
+		res.send(result);
+	});
 
-
+});
 
 
 
