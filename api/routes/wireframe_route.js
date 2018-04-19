@@ -3,7 +3,7 @@ const router = express.Router();
 const wireframeModel = require('../model/wireframe_model');
 const multer = require('multer');
 const path = require('path');
-
+const fs = require('fs');
 var storage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		cb(null, 'uploads/')
@@ -64,7 +64,19 @@ router.post("/gettema", function (req, res) {
 	});
 
 });
+//GET API
+router.get("/getceldaimage", function (req, res) {
+	var result = wireframeModel.getceldaimage(req, res);
+	result.then(function (result) {
+		// you can access the result from the promise here
+		
+		var img = fs.readFileSync('uploads/'+result);
+		res.writeHead(200, { 'Content-Type': 'image/png' });
+		res.end(img, 'binary');
+		res.send(result);
+	});
 
+});
 
 
 module.exports = router;

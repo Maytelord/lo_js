@@ -115,5 +115,13 @@ module.exports = {
 		
 		//console.log(JSON.parse(result));
 		return mymenu;
+	},
+	getceldaimage: async function (res, id) {
+		var query = "select * from Celda_Preview where id = 5";
+		console.log(query);
+		var result = await database.executeQuery(res, query);
+
+		console.log(result[0].archivo);
+		return result[0].archivo;
 	}
 }
