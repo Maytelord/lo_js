@@ -77,6 +77,18 @@ router.get("/getceldaimage", function (req, res) {
 	});
 
 });
+router.post("/getceldaimage", function (req, res) {
+	var result = wireframeModel.getceldaimage(req, res);
+	result.then(function (result) {
+		// you can access the result from the promise here
+
+		var img = fs.readFileSync('uploads/' + result);
+		res.writeHead(200, { 'Content-Type': 'image/png' });
+		res.end(img, 'binary');
+		res.send(result);
+	});
+
+});
 
 
 module.exports = router;
