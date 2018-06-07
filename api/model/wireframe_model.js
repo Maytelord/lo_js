@@ -1,6 +1,7 @@
 const express = require('express');
 const database = require('../lib/database');
 const dateformat = require('../lib/dateFormat');
+var sql = require("mssql");
 
 module.exports = {
 
@@ -9,10 +10,15 @@ module.exports = {
 		id = 2;
 		var idc = req.body.idc;
 		idc = 1;
-		var query = "select * from Tema where id_marca_subseccion = " + id +
-			" AND estatus = '1' AND categoria = " + idc;
 
-		var tema = await database.executeQuery(res, query);
+	
+		var parameters = [
+			{ name: 'id', sqltype: sql.NVarChar, value: id },
+			{ name: 'idc', sqltype: sql.NVarChar, value: idc }
+		];
+		var query = "wfgettema";
+		var tema = await database.executeQuery(res, query, parameters);     
+
 		console.log("T id: " + tema[0].id);
 
 		var i;
@@ -45,9 +51,13 @@ module.exports = {
 		return mymenu;
 	},
 	getCelda: async function (res, id) {
-		var query = "select * from Celda where id_tema = " + id + " AND estatus = '1'";
+
+		var query = "wfgetCelda";
+		var parameters = [
+			{ name: 'id', sqltype: sql.NVarChar, value: id }
+		];
 		console.log(query);
-		var result = await database.executeQuery(res, query);
+		var result = await database.executeQuery(res, query, parameters);     
 
 		return result;
 	},
@@ -59,9 +69,14 @@ module.exports = {
 
 		return result;
 	},
+
 	getSeccion: async function (res, id) {
-		var query = "select id,nombre from seccion where id = "+id+" AND estatus = '1'";
-		var result = await database.executeQuery(res, query);
+		var query = "wfgetSeccion";
+		var parameters = [
+			{ name: 'id', sqltype: sql.NVarChar, value: id }
+		];
+		console.log(query);
+		var result = await database.executeQuery(res, query, parameters);    
 
 		return result;
 	},

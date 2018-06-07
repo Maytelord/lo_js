@@ -1,46 +1,60 @@
 const express = require('express');
 const database = require('../lib/database');
 const dateformat = require('../lib/dateFormat');
+var sql = require("mssql");
 
 module.exports = {
 	getMarcas : async function(res){
-				var query = "select * from [marca] where estatus != '-1'";
+		var query = "ListaMarca";
                 var result = await database.executeQuery (res,query);
-
                 return result ;
-                /*result.then(function(result) {
-    				// you can access the result from the promise here
-    				res.send(result);
-				});*/
 	},
 
-	insertarMarca : async function(req, res){
-				var now = new Date();
+	insertarMarca: async function (req, res) {
+		console.log("insertarMarca");
 
-				var formatDate = dateformat.dateFormat(now, "isoDateTime");
-              	var query = "INSERT INTO [marca] (nombre,color,logo_principal,fecha_creado,estatus) VALUES ('"+req.body.nombre+"','"+req.body.color+"','"+req.file.filename+"','"+formatDate+"','1')";
-                var result = await database.executeQuery (res,query);
-                
-                return result ;
-                /*result.then(function(result) {
-    				// you can access the result from the promise here
-    				res.send(result);
-				});*/
+		var now = new Date();
+				var formatDate = dateformat.dateFormat(now, "isoDateTime");			
+				var parameters = [
+					{ name: 'nombre', sqltype: sql.NVarChar, value: req.body.nombre },
+					{ name: 'color', sqltype: sql.NVarChar, value: req.body.color },
+					{ name: 'filename', sqltype: sql.NVarChar, value: req.file.filename },
+					{ name: 'fecha', sqltype: sql.NVarChar, value: formatDate },
+				];
+				console.log(parameters);
+
+				var query = "InsterMarca";
+				console.log(query);
+				var result = await database.executeQuery(res, query, parameters);
 	},
 
     cambiarMarca : async function(req, res){
                 var now = new Date();
 
                 var formatDate = dateformat.dateFormat(now, "isoDateTime");
-                if(!req.file){
-                    var query = "UPDATE marca SET nombre='"+req.body.nombre+"',color='"+req.body.color+"',fecha_editado='"+formatDate+"' WHERE id="+req.body.id;
+				if (!req.file) {
+					var parameters = [
+						{ name: 'nombre', sqltype: sql.NVarChar, value: req.body.nombre },
+						{ name: 'color', sqltype: sql.NVarChar, value: req.body.color },
+						{ name: 'fecha', sqltype: sql.NVarChar, value: formatDate },
+						{ name: 'id', sqltype: sql.int, value: req.body.id }
+					];
+					var query = "UpdateMarca1";
 
-                }else{
-                    var query = "UPDATE marca SET nombre='"+req.body.nombre+"',color='"+req.body.color+"',logo_principal='"+req.file.filename+"',fecha_editado='"+formatDate+"' WHERE id="+req.body.id;
+				} else {
+					var parameters = [
+						{ name: 'nombre', sqltype: sql.NVarChar, value: req.body.nombre },
+						{ name: 'color', sqltype: sql.NVarChar, value: req.body.color },
+						{ name: 'filename', sqltype: sql.NVarChar, value: req.file.filename },
+						{ name: 'fecha', sqltype: sql.NVarChar, value: formatDate },
+						{ name: 'id', sqltype: sql.int, value: req.body.id }
+
+					];
+					var query = "UpdateMarca2";
 				}
 				console.log(query);
 
-                var result = await database.executeQuery (res,query);
+				var result = await database.executeQuery(res, query, parameters);
                 
                 return result ;
                 /*result.then(function(result) {
@@ -50,12 +64,11 @@ module.exports = {
     },
 
     bajaMarca: async function (req, res) {
-        var query = "UPDATE Marca" +
-            " SET estatus = '-1'"  +
-            " WHERE id  = " + req.body.id;
-        console.log(query);
-
-        var result = await database.executeQuery(res, query);
+		var parameters = [
+			{ name: 'id', sqltype: sql.int, value: req.body.id }
+		];
+		var query = "BajaMarca";
+		var result = await database.executeQuery(res, query, parameters);
         return result;
     }
 

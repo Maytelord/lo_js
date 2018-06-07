@@ -1,6 +1,7 @@
 const express = require('express');
 const database = require('../lib/database');
 const dateformat = require('../lib/dateFormat');
+var sql = require("mssql");
 
 module.exports = {
 	getSeccions : async function(res){
@@ -18,9 +19,13 @@ module.exports = {
 				var now = new Date();
 
 				var formatDate = dateformat.dateFormat(now, "isoDateTime");
-              	var query = "INSERT INTO [seccion] (nombre,fecha_creado,estatus) VALUES ('"+req.body.nombre+"','"+formatDate+"','1')";
-                var result = await database.executeQuery (res,query);
-                
+				var parameters = [
+					{ name: 'nombre', sqltype: sql.NVarChar, value: req.body.nombre },
+					{ name: 'fecha', sqltype: sql.NVarChar, value: formatDate }
+				];
+				var query = "InsterSeccion";
+				console.log(query);
+				var result = await database.executeQuery(res, query, parameters);                
                 return result ;
 	},
 

@@ -48,7 +48,8 @@ router.get('/:id/:nombre', (req, res, next) => {
 });
 
 //GET API
-router.get("/get", function(req , res){
+router.get("/get", function (req, res) {
+
     var result = marcaModel.getMarcas(res);
     result.then(function(result) {
     // you can access the result from the promise here

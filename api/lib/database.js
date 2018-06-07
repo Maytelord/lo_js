@@ -27,23 +27,53 @@ var dbConfig ={
 
 
 
-	async function ConnectionSql(res,query) {
+async function ConnectionSql(res, query, pparameters) {
 
 	    return new Promise((resolve, reject) => {
+			if (pparameters) {
+				new sql.ConnectionPool(dbConfig).connect().then(pool => {
+					var request = pool.request();
 
-	        new sql.ConnectionPool(dbConfig).connect().then(pool => {
-	            return pool.request().query(query)
-	        }).then(result => {
-	        	//res.send(result.recordset);
+					console.log("ConnectionSql con parametros jose 2");
 
-	            resolve(result.recordset);
-	            //return result.recordset;
-	            sql.close();
-	        }).catch(err => {
+					// Add parameters
+					pparameters.forEach(function (p) {
+						console.log("ConnectionSql con parametros: nombre: " + p.name);
+						//console.log("ConnectionSql con parametros: tipo: " + p.sqltype);
+						console.log("ConnectionSql con parametros: valor: " + p.value);
+						//request.input(p.name, p.sqltype, p.value);
 
-	            reject(err)
-	            sql.close();
-	        });
+						request.input(p.name, p.value);
+					});
+
+
+					return request.execute(query)
+				}).then(result => {
+
+					resolve(result.recordset);
+					sql.close();
+
+				}).catch(err => {
+					console.log("ConnectionSql weee");
+
+					reject(err)
+					sql.close();
+				});
+			} else {
+				new sql.ConnectionPool(dbConfig).connect().then(pool => {
+					return pool.request().query(query)
+				}).then(result => {
+					//res.send(result.recordset);
+
+					resolve(result.recordset);
+					//return result.recordset;
+					sql.close();
+				}).catch(err => {
+
+					reject(err)
+					sql.close();
+				});
+			}
 	    });
 
 
@@ -51,104 +81,36 @@ var dbConfig ={
 
 module.exports ={
 	//Function to connect to database and execute query
-	executeQuerybk : function(res, query){             
-	     sql.connect(dbConfig, function (err) {
-	         if (err) {   
-	                     console.log("Error while connecting database :- " + err);
-	                     res.send(err);
-	                  }
-	                  else {
-	                         // create Request object
-	                         var request = new sql.Request();
-	                         // query to the database
-	                         request.query(query, function (err, answer) {
-	                           if (err) {
-	                                      console.log("Error while querying database :- " + err);
-	                                      res.send(err);
-	                                     }
-	                                     else {
-	                                       res.send(answer);
-	                                            }
-	                               });
-	                       }
-	      });           
-	},
+	//executeQuerybk: function (res, query, parameters){             
+	//     sql.connect(dbConfig, function (err) {
+	//         if (err) {   
+	//                     console.log("Error while connecting database :- " + err);
+	//                     res.send(err);
+	//                  }
+	//                  else {
+	//                         // create Request object
+	//			 var request = new sql.Request();
+				 
 
-	executeQuery : async function(res,query){
-	  var result = await ConnectionSql(res,query);
+	//                         // query to the database
+	//                         request.query(query, function (err, answer) {
+	//                           if (err) {
+	//                                      console.log("Error while querying database :- " + err);
+	//                                      res.send(err);
+	//                                     }
+	//                                     else {
+	//                                       res.send(answer);
+	//                                            }
+	//                               });
+	//                       }
+	//      });           
+	//},
+
+	executeQuery: async function (res, query, parameters) {
+
+		var result = await ConnectionSql(res, query, parameters);
 	  return result;
-	  //console.log('Woo done', result)
 	}
 
 
 }
-
-/*
-new sql.ConnectionPool(config).connect().then(pool => {
-  return pool.request().query("")
-  }).then(result => {
-    let rows = result.recordset
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    res.status(200).json(rows);
-    sql.close();
-  }).catch(err => {
-    res.status(500).send({ message: "${err}"})
-    sql.close();
-  });
-});*/
-
-/*
-async function execute2(query) {
-
-    return new Promise((resolve, reject) => {
-
-        new sql.ConnectionPool(dbConfig).connect().then(pool => {
-            return pool.request().query(query)
-        }).then(result => {
-
-            resolve(result.recordset);
-
-            sql.close();
-        }).catch(err => {
-
-            reject(err)
-            sql.close();
-        });
-    });
-
-
-}*/
-
-
-/*
-app.get('/', function (req, res) {
-   
-    var sql = require("mssql");
-
-
-    var config = {
-        user: 'sa',
-        password: 'may',
-        server: '192.168.10.101', 
-        database: 'prueba' 
-    };
-
-    // connect to your database
-    sql.connect(config, function (err) {
-    
-        if (err) console.log(err);
-
-        // create Request object
-        var request = new sql.Request();
-           
-        // query to the database and get the records
-        request.query('select * from marcas', function (err, recordset) {
-            
-            if (err) console.log(err)
-
-            // send records as a response
-            res.send(recordset);
-            
-        });
-    });
-});*/
