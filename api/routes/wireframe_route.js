@@ -90,5 +90,22 @@ router.post("/getceldaimage", function (req, res) {
 
 });
 
+router.get("/getimagefromurl", function (req, res) {
+	try {
+		var result = req.query.url;
+		console.log("result: " + result);
+
+			// you can access the result from the promise here
+
+			var img = fs.readFileSync('uploads/' + result);
+			res.writeHead(200, { 'Content-Type': 'image/png' });
+			res.end(img, 'binary');
+			res.send(result);
+
+	} catch (err) {
+		console.log(err.stack)
+	}
+
+});
 
 module.exports = router;

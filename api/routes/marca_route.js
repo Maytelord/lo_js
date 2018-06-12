@@ -14,8 +14,11 @@ var storage = multer.diskStorage({
   }
 })
 
-var upload = multer({ storage: storage }).single('logo_principal');
-
+var upload = multer({ storage: storage }).fields([{
+	name: 'logo_principal', maxCount: 1
+}, {
+		name: 'banner', maxCount: 1
+}]);
 
 
 //app.use(database.executeQuery);
@@ -59,27 +62,24 @@ router.get("/get", function (req, res) {
 });
 
 router.post("/alta", function (req, res) {
-  console.log("body:"+req.body);
-  console.log("file:" +req.file);
+	try {	
+		  upload(req, res, function (err) {
 
-  upload(req, res, function (err) {
-
-    if (err) {
-      // An error occurred when uploading
-      console.log(err);
-      return
-    }
-
-
-    var result = marcaModel.insertarMarca(req,res);
-    result.then(function(result) {
-        // you can access the result from the promise here
-        res.send(result);
-    });
-
-    // Everything went fine
-  })
-
+			if (err) {
+			  // An error occurred when uploading
+			  console.log(err);
+			  return
+			}
+			var result = marcaModel.insertarMarca(req,res);
+			result.then(function(result) {
+				// you can access the result from the promise here
+				res.send(result);
+			});
+			// Everything went fine
+		  })
+	} catch (err) {
+		console.log(err.stack)
+	}
 
 });
 
